@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="171f669d-2b52-486e-ad5d-398202bd0c1d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/FullFire.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Art/Animations/FullFire.anim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/FullFire.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/FullFire.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Main.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Main.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +102,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1760076146281</updated>
-      <workItem from="1760076148293" duration="763000" />
+      <workItem from="1760076148293" duration="1647000" />
     </task>
     <servers />
   </component>
