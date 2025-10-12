@@ -5,7 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="171f669d-2b52-486e-ad5d-398202bd0c1d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ScreamJam2025/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ScreamJam2025/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/Fire.controller" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/Fire.controller.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/FireDying.anim" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/FireDying.anim.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/LargeFireBurning.anim" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/LargeFireBurning.anim.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/SmallFireBurning.anim" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Animations/SmallFireBurning.anim.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Sprites/FullFire.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Sprites/FullFire.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Sprites/FullSmoke.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Sprites/FullSmoke.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Sprites/SmallFire.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/Sprites/SmallFire.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/placeholder_bg.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Art/placeholder_bg.jpg.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Main.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Main.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/FireController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/FireController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,32 +34,32 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="33rXQ0Dvs8sRYr1HJZwggty6mOx" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "fire-mechanic",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;fire-mechanic&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\6000.2.6f2\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="L:\Unity\Unity626\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath C:\Users\phill\Desktop\ScreamJam2025 -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\phill\Desktop\ScreamJam2025" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -52,7 +71,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\6000.2.6f2\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="L:\Unity\Unity626\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath C:\Users\phill\Desktop\ScreamJam2025 -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\phill\Desktop\ScreamJam2025" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -103,6 +122,8 @@
       <option name="presentableId" value="Default" />
       <updated>1760076146281</updated>
       <workItem from="1760076148293" duration="1647000" />
+      <workItem from="1760141585450" duration="1364000" />
+      <workItem from="1760229581065" duration="1001000" />
     </task>
     <servers />
   </component>

@@ -5,9 +5,13 @@ public class FireController : MonoBehaviour
 {
     [Tooltip("How many seconds the fire stays large.")] 
     [SerializeField] private float m_largeFireDuration = 10f;
+    
+    [Tooltip("How many seconds the fire stays medium.")] 
+    [SerializeField] private float m_mediumFireDuration = 7f;
+
 
     [Tooltip("How many seconds the fire stays small before dying.")] 
-    [SerializeField] private float m_smallFireDuration = 5f;
+    [SerializeField] private float m_smallFireDuration = 3f;
     
     private Animator m_animator;
     [SerializeField] private float m_currentHealth;
@@ -26,15 +30,32 @@ public class FireController : MonoBehaviour
         if (m_currentHealth > 0)
         {
             // Determine how fast health should decay based on the current state
-            // This makes the durations you set in the inspector work correctly.
-            bool isLarge = m_animator.GetCurrentAnimatorStateInfo(0).IsName("LargeFireBurning");
-            float decayRate = isLarge ? (m_maxHealth / 2f) / m_largeFireDuration : (m_maxHealth / 2f) / m_smallFireDuration;
+            var currentAnimationState = m_animator.GetCurrentAnimatorStateInfo(0);
+            float decayRate = CalculateDecayRate(m_largeFireDuration);
+            
+            if (currentAnimationState.IsName("LargeFireBurningAnimation"))
+            {
+                decayRate = CalculateDecayRate(m_largeFireDuration);
+            }
+            else if (currentAnimationState.IsName("MediumFireBurningAnimation"))
+            {
+                decayRate = CalculateDecayRate(m_mediumFireDuration);
+            }
+            else if (currentAnimationState.IsName("SmallFireBurningAnimation"))
+            {
+                decayRate = CalculateDecayRate(m_smallFireDuration);
+            }
             
             m_currentHealth -= decayRate * Time.deltaTime;
 
             // Send the current health value to the Animator every frame
             m_animator.SetFloat("FireHealth", m_currentHealth);
         }
+    }
+
+    private float CalculateDecayRate(float duration)
+    {
+        return (m_maxHealth / 2f) / duration;
     }
 
     public void KeepFireAlive()
