@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: RevolverFrame
   m_EditorClassIdentifier: Assembly-CSharp::Item
   Name: Revolver Frame
-  Icon: {fileID: -2337805001231101989, guid: 00247b90daaea8547b82ff03d1b8152a, type: 3}
-  IsStackable: 0
   Value: 1
-  IsGunPart: 1
+  Type: 1

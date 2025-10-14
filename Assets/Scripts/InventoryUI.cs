@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
     public static InventoryUI Instance;
 
-    public GameObject InventorySlotPrefab;  // Prefab for the slot
-    public Transform ItemsParent;           // Panel to put slots in
+    [SerializeField] private TextMeshProUGUI m_woodCollectedText;
+    [SerializeField] private TextMeshProUGUI m_gunPartsCollectedText;
 
     private void Awake()
     {
@@ -28,34 +25,16 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public void UpdateUI()
     {
-        // Clear all existing slots to avoid duplicates
-        foreach (Transform child in ItemsParent)
+        foreach (var item in InventoryManager.Instance.Items)
         {
-            Destroy(child.gameObject);
-        }
-        
-        // Loop through inventory and create slot for each item
-        Dictionary<Item, int> items = InventoryManager.Instance.Items;
-        foreach (var itemEntry in items)
-        {
-            GameObject slotGO = Instantiate(InventorySlotPrefab, ItemsParent);
-            
-            // Get components of the slot
-            Image itemIcon = slotGO.transform.Find("ItemIcon").GetComponent<Image>();
-            TextMeshProUGUI quantityText = slotGO.transform.Find("QuantityText").GetComponent<TextMeshProUGUI>();
-            
-            // Set icon
-            itemIcon.sprite = itemEntry.Key.Icon;
-            itemIcon.enabled = true;
-            
-            // Set quantity text if greater than 1
-            if (itemEntry.Value > 1 && itemEntry.Key.IsStackable)
+            // Update wood counter UI
+            if (item.Key == ItemType.Wood)
             {
-                quantityText.text = itemEntry.Value.ToString();
+                m_woodCollectedText.text = $"Wood: {item.Value}";
             }
-            else
+            else if (item.Key == ItemType.GunPart)
             {
-                quantityText.text = "";
+                m_gunPartsCollectedText.text = $"Gun Parts: {item.Value}";
             }
         }
     }

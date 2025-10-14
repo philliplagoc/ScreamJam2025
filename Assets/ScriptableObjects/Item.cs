@@ -1,11 +1,16 @@
 using UnityEngine;
 
+// Define the enum outside the ScriptableObject class for broader accessibility
+public enum ItemType
+{
+    Wood,
+    GunPart
+}
+
 [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/Item")]
 public class Item : ScriptableObject
 {
     public string Name = "New Item";
-    public Sprite Icon = null;
-    public bool IsStackable = true;
     public int Value = 0;
-    public bool IsGunPart = false;
+    public ItemType Type;
 }

@@ -5,7 +5,10 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
     // Maps items (key) to quantities (value)
-    public Dictionary<Item, int> Items = new Dictionary<Item, int>();
+    // In this prototype, there are only two types of items:
+    //  - Wood
+    //  - GunPart
+    public Dictionary<ItemType, int> Items = new Dictionary<ItemType, int>();
 
     public static InventoryManager Instance;
 
@@ -23,16 +26,13 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(Item item)
     {
-        if (Items.ContainsKey(item))
+        if (Items.ContainsKey(item.Type))
         {
-            if (item.IsStackable)
-            {
-                Items[item] += item.Value;
-            }
+            Items[item.Type] += item.Value;
         }
         else
         {
-            Items.Add(item, item.Value);
+            Items.Add(item.Type, item.Value);
         }
         
         // Update UI
@@ -52,7 +52,7 @@ public class InventoryManager : MonoBehaviour
         int gunPartsCount = 0;
         foreach (var item in Items.Keys)
         {
-            if (item.IsGunPart)
+            if (item == ItemType.GunPart)
             {
                 gunPartsCount++;
             }
