@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c21a82ac0ea024cb8148b35e811f73, type: 3}
   m_Name: Revolver Frame
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  ItemName: Revolver Frame
+  Name: Revolver Frame
   Icon: {fileID: -2337805001231101989, guid: 00247b90daaea8547b82ff03d1b8152a, type: 3}
   IsStackable: 0
   Value: 0

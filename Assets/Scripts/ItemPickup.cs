@@ -1,16 +1,17 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ItemPickup : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public Item ItemToPickup;
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerClikc(PointerEventData eventData)
     {
+        Debug.Log($"Clicked on {ItemToPickup.Name}");
         
+        InventoryManager.Instance.AddItem(ItemToPickup);
+
+        Destroy(gameObject);
     }
 }

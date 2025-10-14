@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c21a82ac0ea024cb8148b35e811f73, type: 3}
   m_Name: SmallWood
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  ItemName: Small Wood
+  Name: Small Wood
   Icon: {fileID: -8907015550746980148, guid: f47e3d721fa3a2241ade901b42528618, type: 3}
   IsStackable: 1
   Value: 1
