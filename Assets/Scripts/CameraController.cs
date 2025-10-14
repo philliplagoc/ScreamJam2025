@@ -10,6 +10,11 @@ public class CameraController : MonoBehaviour
    public float GridWidth;
    public float GridHeight;
 
+   [Header("Starting Position")] 
+   public int StartCol;
+
+   public int StartRow;
+
    private float m_minX, m_maxX, m_minY, m_maxY;
 
    private void Start()
@@ -23,6 +28,22 @@ public class CameraController : MonoBehaviour
       m_maxX = halfGridWidth;
       m_minY = -halfGridHeight;
       m_maxY = halfGridHeight;
+
+      SetInitialPosition(StartCol, StartRow);
+   }
+
+   private void SetInitialPosition(int column, int row)
+   {
+      float centerX = (GridWidth - 1) / 2.0f;
+      float centerY = (GridHeight - 1) / 2.0f;
+
+      float offsetX = column - centerX;
+      float offsetY = row - centerY;
+
+      float targetX = offsetX * MoveAmountX;
+      float targetY = offsetY * MoveAmountY;
+
+      transform.position = new Vector3(targetX, targetY, transform.position.z);
    }
 
    private void MoveCamera(Vector3 direction)
