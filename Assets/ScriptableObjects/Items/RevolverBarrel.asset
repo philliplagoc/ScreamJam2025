@@ -15,5 +15,5 @@ MonoBehaviour:
   Name: Revolver Barrel
   Icon: {fileID: 8919513742012894312, guid: 00247b90daaea8547b82ff03d1b8152a, type: 3}
   IsStackable: 0
-  Value: 0
+  Value: 1
   IsGunPart: 1

@@ -34,6 +34,14 @@ public class InventoryManager : MonoBehaviour
         {
             Items.Add(item, item.Value);
         }
+        
+        // Update UI
+        if (InventoryUI.Instance != null)
+        {
+            InventoryUI.Instance.UpdateUI();
+        }
+        
+        CheckIfAllGunPartsAreCollected();
     }
 
     /// <summary>
