@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87c21a82ac0ea024cb8148b35e811f73, type: 3}
-  m_Name: Revolver Barrel
+  m_Name: RevolverBarrel
   m_EditorClassIdentifier: Assembly-CSharp::Item
   Name: Revolver Barrel
   Icon: {fileID: 8919513742012894312, guid: 00247b90daaea8547b82ff03d1b8152a, type: 3}
