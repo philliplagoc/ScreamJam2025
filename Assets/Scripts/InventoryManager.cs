@@ -41,26 +41,10 @@ public class InventoryManager : MonoBehaviour
             InventoryUI.Instance.UpdateUI();
         }
         
-        CheckIfAllGunPartsAreCollected();
-    }
-
-    /// <summary>
-    /// This is the win condition of the game
-    /// </summary>
-    private void CheckIfAllGunPartsAreCollected()
-    {
-        int gunPartsCount = 0;
-        foreach (var item in Items.Keys)
+        // Notify GameManager to check for the win condition
+        if (item.Type == ItemType.GunPart && GameManager.Instance != null)
         {
-            if (item == ItemType.GunPart)
-            {
-                gunPartsCount++;
-            }
-        }
-
-        if (gunPartsCount >= 5)
-        {
-            Debug.Log("All gun parts collected, you win!");
+            GameManager.Instance.CheckWinCondition(Items[ItemType.GunPart]);
         }
     }
 }
