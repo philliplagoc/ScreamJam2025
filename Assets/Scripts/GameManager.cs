@@ -1,18 +1,23 @@
 using UnityEngine;
-using TMPro; // Required for using TextMeshPro UI elements
+using TMPro;
+using UnityEngine.SceneManagement; // Required for using TextMeshPro UI elements
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public enum GamePhase { Day, Night }
 
-    [Header("Game Timer Settings")]
-    [Tooltip("The total time for the game in seconds.")]
-    [SerializeField] private float m_gameDuration;
-    [SerializeField] private TextMeshProUGUI m_timerText;
-
+    [Header("Phase Settings")] 
+    [Tooltip("Set the starting phase for the scene.")]
+    public GamePhase CurrentPhase;
+    [SerializeField] private float m_dayDuration;
+    [SerializeField] private float m_nightDuration;
+    
     [Header("Game State UI")]
     [SerializeField] private GameObject m_winScreen; 
     [SerializeField] private GameObject m_loseScreen; 
+    [SerializeField] private TextMeshProUGUI m_timerText;
+    
 
     private float m_currentTime;
     private bool m_isGameOver = false;
@@ -23,6 +28,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -32,10 +38,21 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        m_currentTime = m_gameDuration;
-        m_winScreen.SetActive(false);
-        m_loseScreen.SetActive(false);
-        UpdateTimeUI();
+        SetupPhase();
+    }
+
+    private void SetupPhase()
+    {
+        Time.timeScale = 1f;
+
+        if (CurrentPhase == GamePhase.Day)
+        {
+            m_currentTime = m_dayDuration;
+        }
+        else if (CurrentPhase == GamePhase.Night)
+        {
+            m_currentTime = m_nightDuration;
+        }
     }
 
     private void Update()
@@ -53,10 +70,26 @@ public class GameManager : MonoBehaviour
         {
             // Timer has run out
             m_currentTime = 0;
-            LoseGame();
+            TransitionToNextPhase();
         }
     }
-    
+
+    private void TransitionToNextPhase()
+    {
+        if (CurrentPhase == GamePhase.Day)
+        {
+            Debug.Log("Day has just ended.");
+            CurrentPhase = GamePhase.Night;
+            SceneManager.LoadScene("NightPhase");
+        }
+        else if (CurrentPhase == GamePhase.Night)
+        {
+            Debug.Log("Night has just ended.");
+            CurrentPhase = GamePhase.Day;
+            SceneManager.LoadScene("DayPhase");
+        }
+    }
+
     /// <summary>
     /// Checks if the number of collected gun parts meets the win condition.
     /// This should be called by the InventoryManager whenever a gun part is collected.
