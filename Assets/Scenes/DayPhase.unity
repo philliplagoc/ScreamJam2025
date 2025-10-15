@@ -2584,8 +2584,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   CurrentPhase: 0
-  m_maxDaySteps: 8
-  m_woodCostPerNight: 6
   m_phaseTransitionDelay: 5
   m_dayCountText: {fileID: 1245490228}
   m_winScreen: {fileID: 1988033529}

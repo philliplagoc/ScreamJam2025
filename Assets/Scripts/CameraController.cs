@@ -1,6 +1,19 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
+
+/// <summary>
+/// Holds the data for each cell in the grid.
+/// Includes the amount of wood the grid has and
+/// the number of days till it "respawns" with wood.
+/// If a cell's wood has been collected, it won't have any more wood for a set amount of time.
+/// </summary>
+public struct GridCell
+{
+   public int WoodAmount;
+   public int DaysUntilRespawn;
+}
 public class CameraController : MonoBehaviour
 {
    public static CameraController Instance;
@@ -17,6 +30,10 @@ public class CameraController : MonoBehaviour
    public int StartRow;
 
    private float m_minX, m_maxX, m_minY, m_maxY;
+
+   private GridCell[,] m_gridData;
+   private Vector2Int m_currentGridPosition;
+   private int m_woodSpawnTimer = 4;  // How long it takes for wood to respawn at a cell once it's been collected
 
    private void Awake()
    {
@@ -42,11 +59,55 @@ public class CameraController : MonoBehaviour
       m_minY = -halfGridHeight;
       m_maxY = halfGridHeight;
 
+      InitializeGrid();
+
       SetGridPosition(StartCol, StartRow);
+   }
+
+   private void InitializeGrid()
+   {
+      m_gridData = new GridCell[(int)GridWidth, (int)GridHeight];
+      for (int x = 0; x < GridWidth; x++)
+      {
+         for (int y = 0; y < GridHeight; y++)
+         {
+            m_gridData[x, y] = new GridCell
+            {
+               WoodAmount = Random.Range(1, 4),
+               DaysUntilRespawn = 0  // Not waiting to respawn initially
+            };
+         }
+      }
+   }
+   
+   /// <summary>
+   /// GameManager will call this at the beginning of each day.
+   /// </summary>
+   public void AdvanceDay()
+   {
+      for (int x = 0; x < GridWidth; x++)
+      {
+         for (int y = 0; y < GridHeight; y++)
+         {
+            if (m_gridData[x, y].DaysUntilRespawn > 0)
+            {
+               m_gridData[x, y].DaysUntilRespawn--;
+
+               if (m_gridData[x, y].DaysUntilRespawn == 0)
+               {
+                  // Respawn wood at this location
+                  m_gridData[x, y].WoodAmount = Random.Range(1, 4);
+                  Debug.Log($"Wood has respawned at cell ({x}, {y}).");
+               }
+            }
+         }
+      }
    }
 
    public void SetGridPosition(int column, int row)
    {
+      m_currentGridPosition = new Vector2Int(column, row);
+      
       float centerX = (GridWidth - 1) / 2.0f;
       float centerY = (GridHeight - 1) / 2.0f;
 
@@ -73,12 +134,35 @@ public class CameraController : MonoBehaviour
 
       if (Vector3.Distance(originalPosition, transform.position) > 0.01f)
       {
+         // Update integer grid position based on direction of movement
+         if (direction.x > 0) m_currentGridPosition.x++;
+         if (direction.x < 0) m_currentGridPosition.x--;
+         if (direction.y > 0) m_currentGridPosition.y++;
+         if (direction.y < 0) m_currentGridPosition.y--;
+         
          if (GameManager.Instance != null)
             GameManager.Instance.UseStep();
          
-         // Add a random amount of wood [1,3] to inventory
-         if (InventoryManager.Instance != null) 
-            InventoryManager.Instance.CollectWood();
+         // Collect wood from specific cell we just moved to
+         CollectWoodAtCurrentPosition();
+      }
+   }
+
+   private void CollectWoodAtCurrentPosition()
+   {
+      int x = m_currentGridPosition.x;
+      int y = m_currentGridPosition.y;
+
+      if (m_gridData[x, y].WoodAmount > 0)
+      {
+         int woodToCollect = m_gridData[x, y].WoodAmount;
+         Debug.Log($"Collected {woodToCollect} wood from cell ({x}, {y}).");
+         
+         InventoryManager.Instance.AddItem(ItemType.Wood, woodToCollect);
+         
+         // Set wood on this cell to 0 and restart timer
+         m_gridData[x, y].WoodAmount = 0;
+         m_gridData[x, y].DaysUntilRespawn = m_woodSpawnTimer;
       }
    }
 

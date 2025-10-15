@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -25,15 +23,15 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void AddItem(Item item)
+    public void AddItem(ItemType itemType, int amount)
     {
-        if (Items.ContainsKey(item.Type))
+        if (Items.ContainsKey(itemType))
         {
-            Items[item.Type] += item.Value;
+            Items[itemType] += amount;
         }
         else
         {
-            Items.Add(item.Type, item.Value);
+            Items.Add(itemType, amount);
         }
         
         // Update UI
@@ -43,33 +41,12 @@ public class InventoryManager : MonoBehaviour
         }
         
         // Notify GameManager to check for the win condition
-        if (item.Type == ItemType.GunPart && GameManager.Instance != null)
+        if (itemType == ItemType.GunPart && GameManager.Instance != null)
         {
             GameManager.Instance.CheckWinCondition(Items[ItemType.GunPart]);
         }
     }
-
-    public void CollectWood()
-    {
-        int amountOfWood = Random.Range(1, 4);
-        
-        Debug.Log($"Found and collected {amountOfWood} wood.");
-        if (Items.ContainsKey(ItemType.Wood))
-        {
-            Items[ItemType.Wood] += amountOfWood;
-        }
-        else
-        {
-            Items.Add(ItemType.Wood, amountOfWood);
-        }
-        
-        // Update UI
-        if (InventoryUI.Instance != null)
-        {
-            InventoryUI.Instance.UpdateUI();
-        }
-    }
-
+    
     public bool RemoveItem(ItemType itemType, int amount)
     {
         if (Items.ContainsKey(itemType) && Items[itemType] >= amount)

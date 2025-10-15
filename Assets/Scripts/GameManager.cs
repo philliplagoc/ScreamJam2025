@@ -66,6 +66,12 @@ public class GameManager : MonoBehaviour
 
     private void SetupDayPhase()
     {
+        // Call CameraController to advance day and update respawn timers
+        if (CameraController.Instance != null && m_dayCount > 1)
+        {
+            CameraController.Instance.AdvanceDay();
+        }
+        
         CurrentPhase = GamePhase.Day;
         Time.timeScale = 1f;
         m_isGameOver = false;

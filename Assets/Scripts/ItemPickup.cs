@@ -10,7 +10,7 @@ public class ItemPickup : MonoBehaviour, IPointerClickHandler
     {
         Debug.Log($"Clicked on {ItemToPickup.Name}");
         
-        InventoryManager.Instance.AddItem(ItemToPickup);
+        InventoryManager.Instance.AddItem(ItemToPickup.Type, ItemToPickup.Value);
 
         Destroy(gameObject);
     }
