@@ -48,7 +48,8 @@ public class CameraController : MonoBehaviour
 
    private void MoveCamera(Vector3 direction)
    {
-      Vector3 newPosition = transform.position + direction;
+      Vector3 originalPosition = transform.position;
+      Vector3 newPosition = originalPosition + direction;
       
       // Clamp X and Y values
       newPosition.x = Mathf.Clamp(newPosition.x, m_minX, m_maxX);
@@ -56,30 +57,36 @@ public class CameraController : MonoBehaviour
       
       // Update camera's position
       transform.position = newPosition;
+
+      if (Vector3.Distance(originalPosition, transform.position) > 0.01f)
+      {
+         if (GameManager.Instance != null)
+            GameManager.Instance.UseStep();
+      }
    }
 
    // Public function to move the camera UP (North)
    public void MoveNorth()
    {
-      MoveCamera(new Vector3(0, MoveAmountY, -10));
+      MoveCamera(new Vector3(0, MoveAmountY, 0));
    }
 
    // Public function to move the camera DOWN (South)
    public void MoveSouth()
    {
-      MoveCamera(new Vector3(0, -MoveAmountY, -10));
+      MoveCamera(new Vector3(0, -MoveAmountY, 0));
    }
 
    // Public function to move the camera RIGHT (East)
    public void MoveEast()
    {
-      MoveCamera(new Vector3(MoveAmountX, 0, -10));
+      MoveCamera(new Vector3(MoveAmountX, 0, 0));
    }
 
    // Public function to move the camera LEFT (West)
    public void MoveWest()
    {
-      MoveCamera(new Vector3(-MoveAmountX, 0, -10));
+      MoveCamera(new Vector3(-MoveAmountX, 0, 0));
    }
 
    private void OnDrawGizmos()

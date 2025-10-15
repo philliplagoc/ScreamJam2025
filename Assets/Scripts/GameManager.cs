@@ -1,25 +1,23 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // Required for using TextMeshPro UI elements
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public enum GamePhase { Day, Night }
 
-    [Header("Phase Settings")] 
+    [Header("Phase Settings")]
     [Tooltip("Set the starting phase for the scene.")]
     public GamePhase CurrentPhase;
-    [SerializeField] private float m_dayDuration;
-    [SerializeField] private float m_nightDuration;
-    
-    [Header("Game State UI")]
-    [SerializeField] private GameObject m_winScreen; 
-    [SerializeField] private GameObject m_loseScreen; 
-    [SerializeField] private TextMeshProUGUI m_timerText;
-    
+    [SerializeField] private int m_maxDaySteps;
 
-    private float m_currentTime;
+    [Header("Game State UI")]
+    [SerializeField] private GameObject m_winScreen;
+    [SerializeField] private GameObject m_loseScreen;
+    [SerializeField] private TextMeshProUGUI m_stepsRemainingText;
+
+    private int m_currentSteps;
     private bool m_isGameOver = false;
     private const int GUN_PARTS_TO_WIN = 5;
 
@@ -44,55 +42,53 @@ public class GameManager : MonoBehaviour
     private void SetupPhase()
     {
         Time.timeScale = 1f;
+        m_isGameOver = false;
 
         if (CurrentPhase == GamePhase.Day)
         {
-            m_currentTime = m_dayDuration;
+            m_currentSteps = m_maxDaySteps;
         }
         else if (CurrentPhase == GamePhase.Night)
         {
-            m_currentTime = m_nightDuration;
+            // TODO Setup Night Phase (i.e. show fire animation)
         }
+        
+        // Update the UI to show the starting steps.
+        UpdateStepsUI();
     }
 
-    private void Update()
+    /// <summary>
+    /// Call this method from your player/camera controller every time it moves one step.
+    /// </summary>
+    public void UseStep()
     {
-        // If the game is over, do nothing.
-        if (m_isGameOver) return;
-        
-        // --- Countdown Timer Logic ---
-        if (m_currentTime > 0)
+        if (m_isGameOver || m_currentSteps <= 0) return;
+
+        m_currentSteps--;
+        UpdateStepsUI();
+
+        if (m_currentSteps <= 0)
         {
-            m_currentTime -= Time.deltaTime;
-            UpdateTimeUI();
-        }
-        else
-        {
-            // Timer has run out
-            m_currentTime = 0;
+            // Player has run out of steps.
             TransitionToNextPhase();
         }
     }
-
+    
     private void TransitionToNextPhase()
     {
         if (CurrentPhase == GamePhase.Day)
         {
-            Debug.Log("Day has just ended.");
+            Debug.Log("Day has ended. Ran out of steps.");
             CurrentPhase = GamePhase.Night;
-            SceneManager.LoadScene("NightPhase");
         }
         else if (CurrentPhase == GamePhase.Night)
         {
-            Debug.Log("Night has just ended.");
-            CurrentPhase = GamePhase.Day;
-            SceneManager.LoadScene("DayPhase");
+            Debug.Log("Night has ended.");
         }
     }
-
+    
     /// <summary>
     /// Checks if the number of collected gun parts meets the win condition.
-    /// This should be called by the InventoryManager whenever a gun part is collected.
     /// </summary>
     public void CheckWinCondition(int currentGunPartCount)
     {
@@ -102,41 +98,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdateTimeUI()
+    // This method now updates the step counter UI.
+    private void UpdateStepsUI()
     {
-        // Format the time into minutes and seconds for display
-        string timerText = "Time: 00:00";
-        if (m_currentTime > 0)
+        if (m_stepsRemainingText != null)
         {
-            int minutes = Mathf.FloorToInt(m_currentTime / 60);
-            int seconds = Mathf.FloorToInt(m_currentTime % 60);
-            timerText = $"Time: {minutes:00}:{seconds:00}";    
+            m_stepsRemainingText.text = $"Steps Remaining: {m_currentSteps}";
         }
-        
-        m_timerText.text = timerText;
     }
 
     private void WinGame()
     {
-        if (m_isGameOver) return; // Prevent multiple triggers
+        if (m_isGameOver) return;
 
         m_isGameOver = true;
         m_winScreen.SetActive(true);
-        Debug.Log("You Win! All gun parts collected.");
-        
-        // Optional: Freeze game time
         Time.timeScale = 0f;
+        Debug.Log("You Win! All gun parts collected.");
     }
 
     private void LoseGame()
     {
-        if (m_isGameOver) return; // Prevent multiple triggers
+        if (m_isGameOver) return;
 
         m_isGameOver = true;
         m_loseScreen.SetActive(true);
-        Debug.Log("You Lose! Time ran out.");
-        
-        // Optional: Freeze game time
         Time.timeScale = 0f;
+        Debug.Log("You Lose!");
     }
 }
