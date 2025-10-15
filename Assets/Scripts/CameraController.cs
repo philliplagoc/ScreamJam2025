@@ -75,6 +75,10 @@ public class CameraController : MonoBehaviour
       {
          if (GameManager.Instance != null)
             GameManager.Instance.UseStep();
+         
+         // Add a random amount of wood [1,3] to inventory
+         if (InventoryManager.Instance != null) 
+            InventoryManager.Instance.CollectWood();
       }
    }
 

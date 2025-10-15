@@ -114,6 +114,8 @@ public class GameManager : MonoBehaviour
             CameraController.Instance.SetGridPosition(m_nightStartCol, m_nightStartRow);
         }
         
+        // TODO Hide the 4 cardinal buttons so player can't move during the NightPhase
+        
         // Transition visuals to night
         if (m_dayBackground != null) m_dayBackground.SetActive(false);
         if (m_nightBackground != null) m_nightBackground.SetActive(true);
