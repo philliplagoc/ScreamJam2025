@@ -63,7 +63,7 @@ public class InventoryManager : MonoBehaviour
         }
         
         // Not enough items to remove.
-        Debug.Log($"{amount} of type {itemType} is too much. Currently, I only have {Items[itemType]}.");
+        Debug.Log($"{amount} of type {itemType} is too much.");
         return false;
     } 
 }

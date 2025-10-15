@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
         if (m_nightBackground != null) m_nightBackground.SetActive(false);
         if (m_fireInstance != null) Destroy(m_fireInstance);  // Clean up fire from previous night
         if (m_firePit != null) m_firePit.SetActive(true);
+        if (m_dayCountText != null) m_dayCountText.gameObject.SetActive(true);
         
         
         // Reset steps for the new day
@@ -117,13 +118,17 @@ public class GameManager : MonoBehaviour
         if (m_dayBackground != null) m_dayBackground.SetActive(false);
         if (m_nightBackground != null) m_nightBackground.SetActive(true);
         if (m_firePrefab != null)
+        {
+            // These coordinates correspond to where the fire pit is located in the day scene
             m_fireInstance = Instantiate(m_firePrefab, new Vector3(-4.58f, -4.02f, 0f), Quaternion.identity);
+        }
         if (m_firePit != null) m_firePit.SetActive(false);
+        if (m_dayCountText != null) m_dayCountText.gameObject.SetActive(false);
         
         // Wait for a moment
         yield return new WaitForSeconds(m_phaseTransitionDelay);
         
-        // TODO Check for survival
+        // Check for survival
         Debug.Log($"Checking for wood. Cost: {m_woodCostPerNight}");
         bool survived = InventoryManager.Instance.RemoveItem(ItemType.Wood, m_woodCostPerNight);
 
