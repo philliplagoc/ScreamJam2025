@@ -2597,6 +2597,10 @@ MonoBehaviour:
   m_firePit: {fileID: 765321123}
   m_nightStartCol: 4
   m_nightStartRow: 4
+  m_moveNorthButton: {fileID: 447781249}
+  m_moveSouthButton: {fileID: 1946750140}
+  m_moveEastButton: {fileID: 1430641020}
+  m_moveWestButton: {fileID: 1683918966}
 --- !u!1 &1946750140
 GameObject:
   m_ObjectHideFlags: 0

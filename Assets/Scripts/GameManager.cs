@@ -11,8 +11,8 @@ public class GameManager : MonoBehaviour
     [Header("Phase Settings")]
     [Tooltip("Set the starting phase for the scene.")]
     public GamePhase CurrentPhase;
-    [SerializeField] private int m_maxDaySteps;
-    [SerializeField] private int m_woodCostPerNight;
+    // [SerializeField] private int m_maxDaySteps;
+    // [SerializeField] private int m_woodCostPerNight;
     [SerializeField] private float m_phaseTransitionDelay;
 
     [Header("Cycle Tracking")] 
@@ -34,6 +34,12 @@ public class GameManager : MonoBehaviour
     [Header("Night Settings")] 
     [SerializeField] private int m_nightStartCol;
     [SerializeField] private int m_nightStartRow;
+
+    [Header("Movement Buttons")] 
+    [SerializeField] private GameObject m_moveNorthButton;
+    [SerializeField] private GameObject m_moveSouthButton;
+    [SerializeField] private GameObject m_moveEastButton;
+    [SerializeField] private GameObject m_moveWestButton;
 
     private int m_currentSteps;
     private bool m_isGameOver = false;
@@ -70,10 +76,17 @@ public class GameManager : MonoBehaviour
         if (m_fireInstance != null) Destroy(m_fireInstance);  // Clean up fire from previous night
         if (m_firePit != null) m_firePit.SetActive(true);
         if (m_dayCountText != null) m_dayCountText.gameObject.SetActive(true);
+        if (m_stepsRemainingText != null) m_stepsRemainingText.gameObject.SetActive(true);
+        
+        // Movement buttons
+        if (m_moveNorthButton != null) m_moveNorthButton.SetActive(true);
+        if (m_moveSouthButton != null) m_moveSouthButton.SetActive(true);
+        if (m_moveEastButton != null) m_moveEastButton.SetActive(true);
+        if (m_moveWestButton != null) m_moveWestButton.SetActive(true);
         
         
         // Reset steps for the new day
-        m_currentSteps = m_maxDaySteps;
+        m_currentSteps = CalculateNumberOfStepsForThisDay(m_dayCount);
         UpdateStepsUI();
         UpdateDayCountUI();
     }
@@ -114,7 +127,11 @@ public class GameManager : MonoBehaviour
             CameraController.Instance.SetGridPosition(m_nightStartCol, m_nightStartRow);
         }
         
-        // TODO Hide the 4 cardinal buttons so player can't move during the NightPhase
+        // Hide the 4 cardinal buttons so player can't move during the NightPhase
+        if (m_moveNorthButton != null) m_moveNorthButton.SetActive(false);
+        if (m_moveSouthButton != null) m_moveSouthButton.SetActive(false);
+        if (m_moveEastButton != null) m_moveEastButton.SetActive(false);
+        if (m_moveWestButton != null) m_moveWestButton.SetActive(false);
         
         // Transition visuals to night
         if (m_dayBackground != null) m_dayBackground.SetActive(false);
@@ -126,13 +143,15 @@ public class GameManager : MonoBehaviour
         }
         if (m_firePit != null) m_firePit.SetActive(false);
         if (m_dayCountText != null) m_dayCountText.gameObject.SetActive(false);
+        if (m_stepsRemainingText != null) m_stepsRemainingText.gameObject.SetActive(false);
         
         // Wait for a moment
         yield return new WaitForSeconds(m_phaseTransitionDelay);
         
         // Check for survival
-        Debug.Log($"Checking for wood. Cost: {m_woodCostPerNight}");
-        bool survived = InventoryManager.Instance.RemoveItem(ItemType.Wood, m_woodCostPerNight);
+        Debug.Log($"Checking for wood. Cost: {CalculateWoodNeededForThisNight(m_dayCount)}");
+        bool survived =
+            InventoryManager.Instance.RemoveItem(ItemType.Wood, CalculateWoodNeededForThisNight(m_dayCount));
 
         if (survived)
         {
@@ -150,9 +169,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// Checks if the number of collected gun parts meets the win condition.
-    /// </summary>
     public void CheckWinCondition(int currentGunPartCount)
     {
         if (currentGunPartCount >= GUN_PARTS_TO_WIN)
@@ -195,4 +211,19 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         Debug.Log("You Lose!");
     }
+
+    /// <summary>
+    /// These are the number of steps needed for the given day
+    /// </summary>
+    private int CalculateNumberOfStepsForThisDay(int n)
+    {
+        // Steps = StartingSteps + (StepsIncrease * (n - 1))
+        return 8 + (3 * (n - 1));
+    }
+
+    private int CalculateWoodNeededForThisNight(int n)
+    {
+        // WoodNeeded = round(StartingWood * (GrowthRate ^ (n - 1)))
+        return Mathf.RoundToInt(6 * Mathf.Pow(1.35f, (n - 1)));
+    }    
 }
