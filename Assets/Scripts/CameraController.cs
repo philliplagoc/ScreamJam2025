@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+   public static CameraController Instance;
+   
    // Separate move amounts for horizontal and vertical movement
    public float MoveAmountX;
    public float MoveAmountY;
@@ -12,10 +14,21 @@ public class CameraController : MonoBehaviour
 
    [Header("Starting Position")] 
    public int StartCol;
-
    public int StartRow;
 
    private float m_minX, m_maxX, m_minY, m_maxY;
+
+   private void Awake()
+   {
+      if (Instance == null)
+      {
+         Instance = this;
+      }
+      else
+      {
+         Destroy(gameObject);
+      }
+   }
 
    private void Start()
    {
@@ -29,10 +42,10 @@ public class CameraController : MonoBehaviour
       m_minY = -halfGridHeight;
       m_maxY = halfGridHeight;
 
-      SetInitialPosition(StartCol, StartRow);
+      SetGridPosition(StartCol, StartRow);
    }
 
-   private void SetInitialPosition(int column, int row)
+   public void SetGridPosition(int column, int row)
    {
       float centerX = (GridWidth - 1) / 2.0f;
       float centerY = (GridHeight - 1) / 2.0f;

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -11,11 +12,28 @@ public class GameManager : MonoBehaviour
     [Tooltip("Set the starting phase for the scene.")]
     public GamePhase CurrentPhase;
     [SerializeField] private int m_maxDaySteps;
+    [SerializeField] private int m_woodCostPerNight;
+    [SerializeField] private float m_phaseTransitionDelay;
+
+    [Header("Cycle Tracking")] 
+    [SerializeField] private TextMeshProUGUI m_dayCountText;
+    private int m_dayCount = 1;
 
     [Header("Game State UI")]
     [SerializeField] private GameObject m_winScreen;
     [SerializeField] private GameObject m_loseScreen;
     [SerializeField] private TextMeshProUGUI m_stepsRemainingText;
+
+    [Header("Scene Visuals")] 
+    [SerializeField] private GameObject m_dayBackground;
+    [SerializeField] private GameObject m_nightBackground;
+    [SerializeField] private GameObject m_firePrefab;
+    [SerializeField] private GameObject m_firePit;  // The fire pit that we see in the Day Phase
+    private GameObject m_fireInstance;
+
+    [Header("Night Settings")] 
+    [SerializeField] private int m_nightStartCol;
+    [SerializeField] private int m_nightStartRow;
 
     private int m_currentSteps;
     private bool m_isGameOver = false;
@@ -36,25 +54,27 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        SetupPhase();
+        // Initial setup for the first day
+        SetupDayPhase();
     }
 
-    private void SetupPhase()
+    private void SetupDayPhase()
     {
+        CurrentPhase = GamePhase.Day;
         Time.timeScale = 1f;
         m_isGameOver = false;
 
-        if (CurrentPhase == GamePhase.Day)
-        {
-            m_currentSteps = m_maxDaySteps;
-        }
-        else if (CurrentPhase == GamePhase.Night)
-        {
-            // TODO Setup Night Phase (i.e. show fire animation)
-        }
+        // Visuals
+        if (m_dayBackground != null) m_dayBackground.SetActive(true);
+        if (m_nightBackground != null) m_nightBackground.SetActive(false);
+        if (m_fireInstance != null) Destroy(m_fireInstance);  // Clean up fire from previous night
+        if (m_firePit != null) m_firePit.SetActive(true);
         
-        // Update the UI to show the starting steps.
+        
+        // Reset steps for the new day
+        m_currentSteps = m_maxDaySteps;
         UpdateStepsUI();
+        UpdateDayCountUI();
     }
 
     /// <summary>
@@ -78,15 +98,51 @@ public class GameManager : MonoBehaviour
     {
         if (CurrentPhase == GamePhase.Day)
         {
-            Debug.Log("Day has ended. Ran out of steps.");
-            CurrentPhase = GamePhase.Night;
-        }
-        else if (CurrentPhase == GamePhase.Night)
-        {
-            Debug.Log("Night has ended.");
+            StartCoroutine(NightSequence());
         }
     }
-    
+
+    private IEnumerator NightSequence()
+    {
+        Debug.Log("Day has ended. Night begins...");
+        CurrentPhase = GamePhase.Night;
+        
+        // Move camera to where the fire pit is
+        if (CameraController.Instance != null)
+        {
+            CameraController.Instance.SetGridPosition(m_nightStartCol, m_nightStartRow);
+        }
+        
+        // Transition visuals to night
+        if (m_dayBackground != null) m_dayBackground.SetActive(false);
+        if (m_nightBackground != null) m_nightBackground.SetActive(true);
+        if (m_firePrefab != null)
+            m_fireInstance = Instantiate(m_firePrefab, new Vector3(-4.58f, -4.02f, 0f), Quaternion.identity);
+        if (m_firePit != null) m_firePit.SetActive(false);
+        
+        // Wait for a moment
+        yield return new WaitForSeconds(m_phaseTransitionDelay);
+        
+        // TODO Check for survival
+        Debug.Log($"Checking for wood. Cost: {m_woodCostPerNight}");
+        bool survived = InventoryManager.Instance.RemoveItem(ItemType.Wood, m_woodCostPerNight);
+
+        if (survived)
+        {
+            Debug.Log("Survived the night!");
+            yield return new WaitForSeconds(m_phaseTransitionDelay);
+
+            m_dayCount++;
+            SetupDayPhase();
+        }
+        else
+        {
+            Debug.Log("Not enough wood to survive the night...");
+            LoseGame();
+        }
+
+    }
+
     /// <summary>
     /// Checks if the number of collected gun parts meets the win condition.
     /// </summary>
@@ -97,13 +153,19 @@ public class GameManager : MonoBehaviour
             WinGame();
         }
     }
-
-    // This method now updates the step counter UI.
     private void UpdateStepsUI()
     {
         if (m_stepsRemainingText != null)
         {
             m_stepsRemainingText.text = $"Steps Remaining: {m_currentSteps}";
+        }
+    }
+    
+    private void UpdateDayCountUI()
+    {
+        if (m_dayCountText != null)
+        {
+            m_dayCountText.text = $"Day: {m_dayCount}";
         }
     }
 

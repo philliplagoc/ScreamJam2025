@@ -47,4 +47,23 @@ public class InventoryManager : MonoBehaviour
             GameManager.Instance.CheckWinCondition(Items[ItemType.GunPart]);
         }
     }
+
+    public bool RemoveItem(ItemType itemType, int amount)
+    {
+        if (Items.ContainsKey(itemType) && Items[itemType] >= amount)
+        {
+            Items[itemType] -= amount;
+
+            if (InventoryUI.Instance != null)
+            {
+                InventoryUI.Instance.UpdateUI();
+            }
+
+            return true;
+        }
+        
+        // Not enough items to remove.
+        Debug.Log($"{amount} of type {itemType} is too much. Currently, I only have {Items[itemType]}.");
+        return false;
+    } 
 }
