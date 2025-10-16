@@ -596,6 +596,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 35206f0400b669b449789ee0f5e3ac9c, type: 3}
   - {fileID: 8300000, guid: 8c0ab90c5d9bdb44b9cce1a80f29f128, type: 3}
   - {fileID: 8300000, guid: 14d148a8cb95ebc4c8ca98a90aba8efe, type: 3}
+  LoseGameSoundFx: {fileID: 8300000, guid: 60c7b1f47bdaf8c448e11e79d8765eb9, type: 3}
   m_musicSource: {fileID: 925664182}
   m_sfxSource: {fileID: 925664183}
 --- !u!82 &925664182

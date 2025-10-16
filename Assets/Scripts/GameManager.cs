@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
     [Header("Phase Settings")]
     [Tooltip("Set the starting phase for the scene.")]
     public GamePhase CurrentPhase;
-    // [SerializeField] private int m_maxDaySteps;
-    // [SerializeField] private int m_woodCostPerNight;
     [SerializeField] private float m_phaseTransitionDelay;
 
     [Header("Cycle Tracking")] 
@@ -24,11 +22,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject m_loseScreen;
     [SerializeField] private TextMeshProUGUI m_stepsRemainingText;
 
+    [Header("Game Over Sequence")]
+    [Tooltip("The GameObject with the Animator for the game over sequence.")]
+    [SerializeField] private GameObject m_gameOverAnimatorObject;
+    [Tooltip("The duration of the game over animation in seconds.")]
+    [SerializeField] private float m_gameOverAnimationDuration = 70.0f;
+    
     [Header("Scene Visuals")] 
     [SerializeField] private GameObject m_dayBackground;
     [SerializeField] private GameObject m_nightBackground;
     [SerializeField] private GameObject m_firePrefab;
     [SerializeField] private GameObject m_firePit;  // The fire pit that we see in the Day Phase
+    [SerializeField] private GameObject m_playerCharacter;
     private GameObject m_fireInstance;
 
     [Header("Night Settings")] 
@@ -87,6 +92,8 @@ public class GameManager : MonoBehaviour
         if (m_firePit != null) m_firePit.SetActive(true);
         if (m_dayCountText != null) m_dayCountText.gameObject.SetActive(true);
         if (m_stepsRemainingText != null) m_stepsRemainingText.gameObject.SetActive(true);
+        if (m_playerCharacter != null) m_playerCharacter.SetActive(true);
+        if (m_gameOverAnimatorObject != null) m_gameOverAnimatorObject.SetActive(false);
         
         // Movement buttons
         if (m_moveNorthButton != null) m_moveNorthButton.SetActive(true);
@@ -120,8 +127,22 @@ public class GameManager : MonoBehaviour
 
     public void PlayAgain()
     {
+        // Resume time before changing scenes
+        Time.timeScale = 1f;
+
+        // Destroy the persistent singletons to ensure a completely fresh start
+        if (InventoryManager.Instance != null)
+        {
+            Destroy(InventoryManager.Instance.gameObject);
+        }
+        if (AudioManager.Instance != null)
+        {
+            Destroy(AudioManager.Instance.gameObject);
+        }
+        
+        // Finally, destroy this GameManager instance and load the main menu
+        Destroy(gameObject); 
         SceneManager.LoadScene("MainMenu");
-        // TODO Reset inventory and day counter?
     }
     
     private void TransitionToNextPhase()
@@ -167,7 +188,7 @@ public class GameManager : MonoBehaviour
         if (m_firePit != null) m_firePit.SetActive(false);
         if (m_dayCountText != null) m_dayCountText.gameObject.SetActive(false);
         if (m_stepsRemainingText != null) m_stepsRemainingText.gameObject.SetActive(false);
-        // TODO Hide player character
+        if (m_playerCharacter != null) m_playerCharacter.SetActive(false);
         
         // Wait for a moment
         yield return new WaitForSeconds(m_phaseTransitionDelay);
@@ -231,9 +252,44 @@ public class GameManager : MonoBehaviour
         if (m_isGameOver) return;
 
         m_isGameOver = true;
-        m_loseScreen.SetActive(true);
-        Time.timeScale = 0f;
+        // m_loseScreen.SetActive(true);
+        // Time.timeScale = 0f;
         Debug.Log("You Lose!");
+        StartCoroutine(LoseGameSequence());
+    }
+
+    private IEnumerator LoseGameSequence()
+    {
+        // Play the lose sound effect
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.LoseGameSoundFx);
+        }
+        
+        // Activate the GameOver GameObject to play its animation
+        if (m_gameOverAnimatorObject != null)
+        {
+            m_gameOverAnimatorObject.SetActive(true);
+        }
+        
+        // Wait for the duration of the animation. We use WaitForSecondsRealtime
+        // in case Time.timeScale is already 0.
+        yield return new WaitForSecondsRealtime(m_gameOverAnimationDuration);
+        
+        // Show the final lose panel
+        if (m_loseScreen != null)
+        {
+            m_loseScreen.SetActive(true);
+        }
+
+        // Deactivate the animator object after it's done
+        // if (m_gameOverAnimatorObject != null)
+        // {
+            // m_gameOverAnimatorObject.SetActive(false);
+        // }
+
+        // Pause the game
+        Time.timeScale = 0f;
     }
 
     /// <summary>

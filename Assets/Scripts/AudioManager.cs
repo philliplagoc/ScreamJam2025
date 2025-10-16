@@ -11,6 +11,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip CollectWoodSoundFx;
     public AudioClip CollectGunPartSoundFx;
     public AudioClip[] NightPhaseGhostSoundFxs;
+    public AudioClip LoseGameSoundFx;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource m_musicSource; // For looping music
