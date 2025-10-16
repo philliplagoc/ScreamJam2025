@@ -43,6 +43,10 @@ public class InventoryManager : MonoBehaviour
         // Notify GameManager to check for the win condition
         if (itemType == ItemType.GunPart && GameManager.Instance != null)
         {
+            // Play gun sound fx
+            if (AudioManager.Instance != null) 
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.CollectGunPartSoundFx);
+            
             GameManager.Instance.CheckWinCondition(Items[ItemType.GunPart]);
         }
     }

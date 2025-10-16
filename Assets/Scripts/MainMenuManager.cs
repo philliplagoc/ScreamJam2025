@@ -6,8 +6,7 @@ public class MainMenuManager : MonoBehaviour
 {
     private void Start()
     {
-        if (AudioManager.Instance != null)
-            AudioManager.Instance.PlayMusic("MainMenuBackgroundMusic");
+        AudioManager.Instance.PlayMainMenuMusic();
     }
 
     public void StartGame()

@@ -66,6 +66,10 @@ public class GameManager : MonoBehaviour
 
     private void SetupDayPhase()
     {
+        // Play music
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayDayPhaseMusic();
+        
         // Call CameraController to advance day and update respawn timers
         if (CameraController.Instance != null && m_dayCount > 1)
         {
@@ -132,6 +136,10 @@ public class GameManager : MonoBehaviour
         {
             CameraController.Instance.SetGridPosition(m_nightStartCol, m_nightStartRow);
         }
+        
+        // Play fire crackling sound
+        if (AudioManager.Instance != null) 
+            AudioManager.Instance.PlayFireSound();
         
         // Hide the 4 cardinal buttons so player can't move during the NightPhase
         if (m_moveNorthButton != null) m_moveNorthButton.SetActive(false);

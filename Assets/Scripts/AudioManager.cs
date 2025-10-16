@@ -1,12 +1,19 @@
 using UnityEngine;
-using System;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
-    public Sound[] musicSounds;
-    public Sound[] sfxSounds;
+    [Header("Audio Clips")]
+    public AudioClip MainMenuMusic;
+    public AudioClip DayPhaseMusic;
+    public AudioClip FireSound;
+    public AudioClip CollectWoodSoundFx;
+    public AudioClip CollectGunPartSoundFx;
+
+    [Header("Audio Sources")]
+    [SerializeField] private AudioSource m_musicSource; // For looping music
+    [SerializeField] private AudioSource m_sfxSource;   // For sound effects
 
     private void Awake()
     {
@@ -19,58 +26,28 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        // Create AudioSource components for all music clips
-        foreach (Sound s in musicSounds)
-        {
-            s.Source = gameObject.AddComponent<AudioSource>();
-            s.Source.clip = s.Clip;
-            s.Source.volume = s.Volume;
-            s.Source.pitch = s.Pitch;
-            s.Source.loop = s.loop;
-        }
-
-        // Create AudioSource components for all sound effect clips
-        foreach (Sound s in sfxSounds)
-        {
-            s.Source = gameObject.AddComponent<AudioSource>();
-            s.Source.clip = s.Clip;
-            s.Source.volume = s.Volume;
-            s.Source.pitch = s.Pitch;
-            s.Source.loop = s.loop;
-        }
     }
 
-    public void PlayMusic(string name)
+    public void PlayMainMenuMusic()
     {
-        // Find the sound in the musicSounds array with the matching name
-        Sound s = Array.Find(musicSounds, sound => sound.Name == name);
-
-        if (s == null)
-        {
-            Debug.LogWarning("Sound: " + name + " not found!");
-            return;
-        }
-        
-        // Stop all other music before playing the new one
-        foreach (Sound music in musicSounds)
-        {
-            music.Source.Stop();
-        }
-
-        s.Source.Play();
+        m_musicSource.clip = MainMenuMusic;
+        m_musicSource.Play();
     }
     
-    public void PlaySFX(string name)
+    public void PlayDayPhaseMusic()
     {
-        Sound s = Array.Find(sfxSounds, sound => sound.Name == name);
+        m_musicSource.clip = DayPhaseMusic;
+        m_musicSource.Play();
+    }
 
-        if (s == null)
-        {
-            Debug.LogWarning("Sound: " + name + " not found!");
-            return;
-        }
+    public void PlayFireSound()
+    {
+        m_musicSource.clip = FireSound;
+        m_musicSource.Play();
+    }
 
-        s.Source.PlayOneShot(s.Clip);
+    public void PlaySFX(AudioClip clip)
+    {
+        m_sfxSource.PlayOneShot(clip);
     }
 }
