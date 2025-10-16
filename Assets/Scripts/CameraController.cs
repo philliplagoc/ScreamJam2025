@@ -29,6 +29,9 @@ public class CameraController : MonoBehaviour
    public int StartCol;
    public int StartRow;
 
+   [Header("Player Animation")] 
+   [SerializeField] private PlayerAnimator m_playerAnimator;
+
    private float m_minX, m_maxX, m_minY, m_maxY;
 
    private GridCell[,] m_gridData;
@@ -166,27 +169,27 @@ public class CameraController : MonoBehaviour
       }
    }
 
-   // Public function to move the camera UP (North)
    public void MoveNorth()
    {
+      if (m_playerAnimator != null) m_playerAnimator.PlayMoveAnimation(new Vector2(0, 1));
       MoveCamera(new Vector3(0, MoveAmountY, 0));
    }
-
-   // Public function to move the camera DOWN (South)
+   
    public void MoveSouth()
    {
+      if (m_playerAnimator != null) m_playerAnimator.PlayMoveAnimation(new Vector2(0, -1));
       MoveCamera(new Vector3(0, -MoveAmountY, 0));
    }
-
-   // Public function to move the camera RIGHT (East)
+   
    public void MoveEast()
    {
+      if (m_playerAnimator != null) m_playerAnimator.PlayMoveAnimation(new Vector2(1, 0));
       MoveCamera(new Vector3(MoveAmountX, 0, 0));
    }
-
-   // Public function to move the camera LEFT (West)
+   
    public void MoveWest()
    {
+      if (m_playerAnimator != null) m_playerAnimator.PlayMoveAnimation(new Vector2(-1, 0));
       MoveCamera(new Vector3(-MoveAmountX, 0, 0));
    }
 
