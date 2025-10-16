@@ -137,9 +137,12 @@ public class GameManager : MonoBehaviour
             CameraController.Instance.SetGridPosition(m_nightStartCol, m_nightStartRow);
         }
         
-        // Play fire crackling sound
-        if (AudioManager.Instance != null) 
+        // Play fire crackling sound and random ghost noise
+        if (AudioManager.Instance != null)
+        {
             AudioManager.Instance.PlayFireSound();
+            AudioManager.Instance.PlayRandomNightPhaseGhostSoundFx();
+        }
         
         // Hide the 4 cardinal buttons so player can't move during the NightPhase
         if (m_moveNorthButton != null) m_moveNorthButton.SetActive(false);

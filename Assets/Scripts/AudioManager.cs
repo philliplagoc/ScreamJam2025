@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip FireSound;
     public AudioClip CollectWoodSoundFx;
     public AudioClip CollectGunPartSoundFx;
+    public AudioClip[] NightPhaseGhostSoundFxs;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource m_musicSource; // For looping music
@@ -49,5 +50,13 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(AudioClip clip)
     {
         m_sfxSource.PlayOneShot(clip);
+    }
+
+    public void PlayRandomNightPhaseGhostSoundFx()
+    {
+        if (NightPhaseGhostSoundFxs != null && NightPhaseGhostSoundFxs.Length > 0)
+        {
+            m_sfxSource.PlayOneShot(NightPhaseGhostSoundFxs[Random.Range(0, NightPhaseGhostSoundFxs.Length)]);
+        }
     }
 }
