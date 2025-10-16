@@ -117,6 +117,12 @@ public class GameManager : MonoBehaviour
             TransitionToNextPhase();
         }
     }
+
+    public void PlayAgain()
+    {
+        SceneManager.LoadScene("MainMenu");
+        // TODO Reset inventory and day counter?
+    }
     
     private void TransitionToNextPhase()
     {
@@ -161,6 +167,7 @@ public class GameManager : MonoBehaviour
         if (m_firePit != null) m_firePit.SetActive(false);
         if (m_dayCountText != null) m_dayCountText.gameObject.SetActive(false);
         if (m_stepsRemainingText != null) m_stepsRemainingText.gameObject.SetActive(false);
+        // TODO Hide player character
         
         // Wait for a moment
         yield return new WaitForSeconds(m_phaseTransitionDelay);
@@ -242,5 +249,6 @@ public class GameManager : MonoBehaviour
     {
         // WoodNeeded = round(StartingWood * (GrowthRate ^ (n - 1)))
         return Mathf.RoundToInt(6 * Mathf.Pow(1.35f, (n - 1)));
-    }    
+    }
+    
 }
